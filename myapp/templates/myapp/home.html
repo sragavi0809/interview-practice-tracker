@@ -1,0 +1,1031 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interview Practice Tracker</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: #111827;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .logout {
+            background: #111827;
+            color: white !important;
+            padding: 9px 17px;
+            border-radius: 7px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .welcome p {
+            margin-top: 8px;
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           STATISTICS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-card h2 {
+            font-size: 28px;
+            margin: 18px 0 5px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           DASHBOARD GRID
+        ========================= */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .panel-header span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           OVERALL PROGRESS
+        ========================= */
+
+        .overall-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #111827;
+            border-radius: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           CATEGORY PROGRESS
+        ========================= */
+
+        .category-item {
+            margin-bottom: 19px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .category-bar {
+            width: 100%;
+            height: 9px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .category-fill {
+            height: 100%;
+            background: #111827;
+            border-radius: 20px;
+        }
+
+        .category-info {
+            margin-top: 5px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           WEEKLY PROGRESS
+        ========================= */
+
+        .weekly-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 180px;
+            gap: 12px;
+            padding-top: 20px;
+        }
+
+        .day-column {
+            height: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-count {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .day-bar-area {
+            height: 120px;
+            width: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .day-bar {
+            width: 65%;
+            min-height: 5px;
+            background: #111827;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .day-name {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           RECENT SESSIONS
+        ========================= */
+
+        .session {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .session:last-child {
+            border-bottom: none;
+        }
+
+        .session-info strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .session-info span {
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .score {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .action-button {
+            padding: 17px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            color: #111827;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .action-button:hover {
+            background: #f3f4f6;
+        }
+
+        .practice-button {
+            background: #111827;
+            color: white;
+        }
+
+        .practice-button:hover {
+            background: #374151;
+        }
+
+
+        /* =========================
+           FOCUS AREAS
+        ========================= */
+
+        .focus-box {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .focus-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .focus-box span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .empty {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🧠
+        </div>
+
+        <div>
+
+            <h2>
+                Interview Practice Tracker
+            </h2>
+
+            <p>
+                Build confidence. Practice smarter.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">
+            🏠 Dashboard
+        </a>
+
+        <a href="{% url 'question_list' %}">
+            📚 Question Bank
+        </a>
+
+        <a href="{% url 'practice' %}">
+            🎯 Daily Practice
+        </a>
+
+        <a href="{% url 'practice_history' %}">
+            📅 History
+        </a>
+
+        <a href="{% url 'logout' %}" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h1>
+            Your Progress Dashboard
+        </h1>
+
+        <p>
+            Track your interview preparation journey and keep improving every day.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================= -->
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span>
+                    📚
+                </span>
+
+                <span>
+                    📝
+                </span>
+
+            </div>
+
+            <h2>
+                {{ total_questions }}
+            </h2>
+
+            <p>
+                Questions Available
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span>
+                    ✅
+                </span>
+
+                <span>
+                    🎯
+                </span>
+
+            </div>
+
+            <h2>
+                {{ practiced_questions }}
+            </h2>
+
+            <p>
+                Questions Practiced
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span>
+                    ⭐
+                </span>
+
+                <span>
+                    📊
+                </span>
+
+            </div>
+
+            <h2>
+                {{ average_score|floatformat:1 }}%
+            </h2>
+
+            <p>
+                Average Score
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span>
+                    🔥
+                </span>
+
+                <span>
+                    ⚡
+                </span>
+
+            </div>
+
+            <h2>
+                {{ streak }}
+            </h2>
+
+            <p>
+                Day Streak
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         PROGRESS + CATEGORY
+    ========================= -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- OVERALL PROGRESS -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    📈 Overall Progress
+                </h2>
+
+                <span>
+                    Practice completion
+                </span>
+
+            </div>
+
+
+            <div class="overall-number">
+
+                {{ progress_percentage|floatformat:0 }}%
+
+            </div>
+
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    style="width: {{ progress_percentage }}%;">
+                </div>
+
+            </div>
+
+
+            <div class="progress-info">
+
+                <span>
+                    {{ practiced_questions }} practiced
+                </span>
+
+                <span>
+                    {{ not_practiced_questions }} remaining
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CATEGORY PROGRESS -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h2>
+                    📂 Category Progress
+                </h2>
+
+                <span>
+                    Your categories
+                </span>
+
+            </div>
+
+
+            {% for category in category_progress %}
+
+                <div class="category-item">
+
+                    <div class="category-header">
+
+                        <span>
+                            {{ category.name }}
+                        </span>
+
+                        <span>
+                            {{ category.percentage|floatformat:0 }}%
+                        </span>
+
+                    </div>
+
+
+                    <div class="category-bar">
+
+                        <div
+                            class="category-fill"
+                            style="width: {{ category.percentage }}%;">
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-info">
+
+                        {{ category.practiced }}
+                        /
+                        {{ category.total }}
+                        questions practiced
+
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="empty">
+                    No categories available yet.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         WEEKLY PROGRESS
+    ========================= -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h2>
+                📈 Weekly Progress
+            </h2>
+
+            <span>
+                Practice sessions this week
+            </span>
+
+        </div>
+
+
+        <div class="weekly-chart">
+
+
+            {% for day in weekly_progress %}
+
+                <div class="day-column">
+
+                    <div class="day-count">
+                        {{ day.count }}
+                    </div>
+
+
+                    <div class="day-bar-area">
+
+                        {% if day.count > 0 %}
+
+                            <div
+                                class="day-bar"
+                                style="height: {{ day.count }}0px;">
+                            </div>
+
+                        {% else %}
+
+                            <div
+                                class="day-bar"
+                                style="height: 5px;">
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="day-name">
+                        {{ day.day }}
+                    </div>
+
+                </div>
+
+            {% empty %}
+
+                <p class="empty">
+                    No practice data available this week.
+                </p>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- =========================
+         QUICK ACTIONS
+    ========================= -->
+
+    <div class="actions">
+
+
+        <a
+            href="{% url 'add_question' %}"
+            class="action-button">
+
+            ➕ Add Question
+
+        </a>
+
+
+        <a
+            href="{% url 'question_list' %}"
+            class="action-button">
+
+            📚 Question Bank
+
+        </a>
+
+
+        <a
+            href="{% url 'practice' %}"
+            class="action-button practice-button">
+
+            🎯 Start Practice
+
+        </a>
+
+
+        <a
+            href="{% url 'practice_history' %}"
+            class="action-button">
+
+            📅 Practice History
+
+        </a>
+
+
+    </div>
+
+
+    <!-- =========================
+         RECENT PRACTICE SESSIONS
+    ========================= -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h2>
+                📝 Recent Practice Sessions
+            </h2>
+
+            <span>
+                Latest attempts
+            </span>
+
+        </div>
+
+
+        {% for session in recent_sessions %}
+
+            <div class="session">
+
+                <div class="session-info">
+
+                    <strong>
+                        Practice Session
+                    </strong>
+
+                    <span>
+                        {{ session.practiced_at|date:"d M Y, h:i A" }}
+                    </span>
+
+                </div>
+
+
+                <div class="score">
+
+                    {{ session.percentage|floatformat:0 }}%
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p class="empty">
+
+                No practice sessions yet.
+                Start practicing to see your history here.
+
+            </p>
+
+        {% endfor %}
+
+    </div>
+
+
+    <br>
+
+
+    <!-- =========================
+         FOCUS AREAS
+    ========================= -->
+
+    <div class="panel">
+
+        <div class="panel-header">
+
+            <h2>
+                🎯 Focus Areas
+            </h2>
+
+            <span>
+                Keep improving
+            </span>
+
+        </div>
+
+
+        {% for category in category_progress %}
+
+            {% if category.percentage < 50 %}
+
+                <div class="focus-box">
+
+                    <strong>
+                        {{ category.name }}
+                    </strong>
+
+                    <span>
+
+                        Only
+                        {{ category.percentage|floatformat:0 }}%
+                        completed.
+
+                        Practice more questions in this category.
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        {% empty %}
+
+            <p class="empty">
+
+                Add some questions to start tracking your focus areas.
+
+            </p>
+
+        {% endfor %}
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>
+

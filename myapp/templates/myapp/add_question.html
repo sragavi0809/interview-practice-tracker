@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Question</title>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 60%;
+        max-width: 700px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 30px;
+        font-size: 30px;
+    }
+
+    label {
+        display: block;
+        margin-top: 18px;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #222;
+    }
+
+    textarea {
+        height: 140px;
+        resize: vertical;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        margin: 28px auto 10px;
+        padding: 13px;
+        background-color: #222;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #444;
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+
+        .container {
+            width: 85%;
+            margin: 30px auto;
+            padding: 25px;
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        Add Interview Question
+    </h1>
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <label for="question">
+            Question
+        </label>
+
+        <input
+            type="text"
+            id="question"
+            name="question"
+            placeholder="Enter interview question"
+            required
+        >
+
+
+        <label for="category">
+            Category
+        </label>
+
+        <select
+            id="category"
+            name="category"
+            required
+        >
+
+            <option value="">
+                Select Category
+            </option>
+
+            <option value="Python">
+                Python
+            </option>
+
+            <option value="Django">
+                Django
+            </option>
+
+            <option value="HTML">
+                HTML
+            </option>
+
+            <option value="CSS">
+                CSS
+            </option>
+
+            <option value="JavaScript">
+                JavaScript
+            </option>
+
+            <option value="Linux">
+                Linux
+            </option>
+
+            <option value="Networking">
+                Networking
+            </option>
+
+            <option value="Cybersecurity">
+                Cybersecurity
+            </option>
+
+            <option value="Database">
+                Database
+            </option>
+
+        </select>
+
+
+        <label for="answer">
+            Answer
+        </label>
+
+        <textarea
+            id="answer"
+            name="answer"
+            placeholder="Enter the answer"
+            required
+        ></textarea>
+
+
+        <button type="submit">
+            Save Question
+        </button>
+
+    </form>
+
+
+    <a
+        href="{% url 'question_list' %}"
+        class="back-link"
+    >
+        ← Back to Questions
+    </a>
+
+</div>
+
+
+</body>
+
+</html>

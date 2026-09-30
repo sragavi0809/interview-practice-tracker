@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Practice Mode</title>
+
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+
+        h1 {
+            text-align: center;
+        }
+
+
+        .progress {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+
+        .question-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .category {
+            color: #666;
+        }
+
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+
+        button {
+            padding: 10px 18px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+
+        .submit-button {
+            background-color: #222;
+            color: white;
+        }
+
+
+        .right-button {
+            background-color: #198754;
+            color: white;
+            margin-right: 10px;
+        }
+
+
+        .wrong-button {
+            background-color: #dc3545;
+            color: white;
+        }
+
+
+        .answer-box {
+            background-color: #f1f1f1;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+
+        .user-answer {
+            background-color: #e8f4ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #222;
+        }
+
+
+        .result-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>🎯 Practice Mode</h1>
+
+
+    <div class="progress">
+
+        Question
+
+        <span id="current-question">
+            1
+        </span>
+
+        of
+
+        <span id="total-questions">
+            {{ questions|length }}
+        </span>
+
+    </div>
+
+
+    {% if questions %}
+
+
+        {% for question in questions %}
+
+
+            <div
+                class="question-card question"
+                id="question-{{ forloop.counter0 }}"
+
+                {% if not forloop.first %}
+                    style="display: none;"
+                {% endif %}
+            >
+
+
+                <h2>
+                    {{ question.question }}
+                </h2>
+
+
+                <p class="category">
+
+                    Category:
+                    {{ question.category }}
+
+                </p>
+
+
+                <!-- User Answer -->
+
+                <textarea
+                    id="user-answer-{{ forloop.counter0 }}"
+                    placeholder="Type your answer here..."
+                ></textarea>
+
+
+                <button
+                    type="button"
+                    class="submit-button"
+                    onclick="submitAnswer({{ forloop.counter0 }})"
+                >
+
+                    Submit Answer
+
+                </button>
+
+
+                <!-- User's Answer -->
+
+                <div
+                    id="submitted-answer-{{ forloop.counter0 }}"
+                    class="user-answer hidden"
+                >
+
+                    <strong>
+                        Your Answer:
+                    </strong>
+
+                    <p
+                        id="user-answer-text-{{ forloop.counter0 }}"
+                    ></p>
+
+                </div>
+
+
+                <!-- Correct Answer -->
+
+                <div
+                    id="correct-answer-{{ forloop.counter0 }}"
+                    class="answer-box hidden"
+                >
+
+                    <strong>
+                        Correct Answer:
+                    </strong>
+
+                    <p>
+                        {{ question.answer }}
+                    </p>
+
+                </div>
+
+
+                <!-- Right / Wrong -->
+
+                <div
+                    id="buttons-{{ forloop.counter0 }}"
+                    class="hidden"
+                >
+
+                    <p>
+                        Did you answer correctly?
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="right-button"
+                        onclick="nextQuestion(true)"
+                    >
+
+                        ✅ I Got It Right
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="wrong-button"
+                        onclick="nextQuestion(false)"
+                    >
+
+                        ❌ I Got It Wrong
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+        <!-- Result -->
+
+        <div
+            id="result"
+            class="result-card"
+            style="display: none;"
+        >
+
+
+            <h2>
+                🎉 Practice Completed!
+            </h2>
+
+
+            <h3>
+
+                Your Score:
+
+                <span id="score">
+                    0
+                </span>
+
+                /
+
+                <span id="final-total">
+                    {{ questions|length }}
+                </span>
+
+            </h3>
+
+
+            <p>
+
+                Percentage:
+
+                <span id="percentage">
+                    0
+                </span>%
+
+            </p>
+
+
+            <p id="save-message"></p>
+
+
+            <button
+                type="button"
+                class="submit-button"
+                onclick="location.reload()"
+            >
+
+                🔄 Practice Again
+
+            </button>
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="question-card">
+
+            <h2>
+                No questions available
+            </h2>
+
+            <p>
+                Please add some interview questions first.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+    <a
+        href="{% url 'home' %}"
+        class="back-button"
+    >
+
+        ← Back to Dashboard
+
+    </a>
+
+
+</div>
+
+
+<script>
+
+
+let currentQuestion = 0;
+
+let score = 0;
+
+
+const questions =
+    document.querySelectorAll(".question");
+
+
+const totalQuestions =
+    questions.length;
+
+
+
+function submitAnswer(index) {
+
+
+    const textarea =
+        document.getElementById(
+            "user-answer-" + index
+        );
+
+
+    const userAnswer =
+        textarea.value.trim();
+
+
+    if (userAnswer === "") {
+
+        alert(
+            "Please type your answer before submitting."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "user-answer-text-" + index
+    ).textContent =
+        userAnswer;
+
+
+    document.getElementById(
+        "submitted-answer-" + index
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "correct-answer-" + index
+    ).classList.remove("hidden");
+
+
+    document.getElementById(
+        "buttons-" + index
+    ).classList.remove("hidden");
+
+
+    textarea.disabled = true;
+
+
+    const submitButton =
+        questions[index].querySelector(
+            ".submit-button"
+        );
+
+
+    submitButton.disabled = true;
+
+}
+
+
+
+function nextQuestion(isCorrect) {
+
+
+    if (isCorrect === true) {
+
+        score = score + 1;
+
+    }
+
+
+    questions[currentQuestion].style.display =
+        "none";
+
+
+    currentQuestion =
+        currentQuestion + 1;
+
+
+    if (currentQuestion < totalQuestions) {
+
+
+        questions[currentQuestion].style.display =
+            "block";
+
+
+        document.getElementById(
+            "current-question"
+        ).textContent =
+            currentQuestion + 1;
+
+    }
+
+
+    else {
+
+        showResult();
+
+    }
+
+}
+
+
+
+function showResult() {
+
+
+    document.getElementById(
+        "result"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        score;
+
+
+    let percentage = 0;
+
+
+    if (totalQuestions > 0) {
+
+
+        percentage =
+            Math.round(
+                (score / totalQuestions) * 100
+            );
+
+    }
+
+
+    document.getElementById(
+        "percentage"
+    ).textContent =
+        percentage;
+
+
+    saveResult(
+        totalQuestions,
+        score,
+        percentage
+    );
+
+}
+
+
+
+function saveResult(
+    total,
+    correct,
+    percentage
+) {
+
+
+    const formData =
+        new URLSearchParams();
+
+
+    formData.append(
+        "total_questions",
+        total
+    );
+
+
+    formData.append(
+        "correct_answers",
+        correct
+    );
+
+
+    formData.append(
+        "score",
+        correct
+    );
+
+
+    formData.append(
+        "percentage",
+        percentage
+    );
+
+
+    fetch(
+        "{% url 'save_practice_result' %}",
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "X-CSRFToken":
+                    getCookie("csrftoken"),
+
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+
+            },
+
+            body: formData
+
+        }
+    )
+
+
+    .then(response => {
+
+
+        if (response.ok) {
+
+
+            document.getElementById(
+                "save-message"
+            ).textContent =
+                "✅ Your score has been saved!";
+
+
+        }
+
+
+        else {
+
+
+            document.getElementById(
+                "save-message"
+            ).textContent =
+                "❌ Could not save your score.";
+
+        }
+
+    })
+
+
+    .catch(error => {
+
+
+        console.log(error);
+
+
+        document.getElementById(
+            "save-message"
+        ).textContent =
+            "❌ Something went wrong.";
+
+    });
+
+}
+
+
+
+function getCookie(name) {
+
+
+    let cookieValue = null;
+
+
+    if (
+        document.cookie &&
+        document.cookie !== ""
+    ) {
+
+
+        const cookies =
+            document.cookie.split(";");
+
+
+        for (
+            let i = 0;
+            i < cookies.length;
+            i++
+        ) {
+
+
+            const cookie =
+                cookies[i].trim();
+
+
+            if (
+                cookie.substring(
+                    0,
+                    name.length + 1
+                ) ===
+                (name + "=")
+            ) {
+
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+
+                break;
+
+            }
+
+        }
+
+    }
+
+
+    return cookieValue;
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

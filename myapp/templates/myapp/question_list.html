@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interview Questions</title>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 85%;
+        max-width: 1000px;
+        margin: 40px auto;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 36px;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        font-size: 17px;
+        margin-bottom: 30px;
+    }
+
+    .top-button {
+        display: block;
+        width: fit-content;
+        margin: 0 auto 30px;
+        padding: 11px 20px;
+        background-color: #222;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+    }
+
+    .top-button:hover {
+        background-color: #444;
+    }
+
+    .search-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        width: 300px;
+        padding: 11px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    .category-select,
+    .status-select {
+        padding: 11px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        background-color: white;
+    }
+
+    .search-button {
+        padding: 11px 20px;
+        background-color: #222;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .search-button:hover {
+        background-color: #444;
+    }
+
+    .question-card {
+        background-color: white;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .question-card h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 22px;
+    }
+
+    .category {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .answer {
+        line-height: 1.7;
+        margin-bottom: 10px;
+    }
+
+    .status {
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    .practiced {
+        color: green;
+    }
+
+    .not-practiced {
+        color: red;
+    }
+
+    .practice-button,
+    .edit-button,
+    .delete-button {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 9px 15px;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+    }
+
+    .practice-button {
+        background-color: #333;
+    }
+
+    .practice-button:hover {
+        background-color: #111;
+    }
+
+    .edit-button {
+        background-color: #1976d2;
+        margin-left: 8px;
+    }
+
+    .edit-button:hover {
+        background-color: #125ca5;
+    }
+
+    .delete-button {
+        background-color: #c62828;
+        margin-left: 8px;
+    }
+
+    .delete-button:hover {
+        background-color: #a61f1f;
+    }
+
+    .empty-message {
+        text-align: center;
+        color: #666;
+        margin-top: 50px;
+    }
+
+    @media (max-width: 700px) {
+
+        .container {
+            width: 90%;
+        }
+
+        .search-form {
+            flex-direction: column;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .category-select,
+        .status-select,
+        .search-button {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <h1>
+        Interview Questions
+    </h1>
+
+    <p class="subtitle">
+        Practice your interview questions and track your progress
+    </p>
+
+    <a
+        href="{% url 'add_question' %}"
+        class="top-button"
+    >
+        + Add New Question
+    </a>
+
+
+    <form
+        method="GET"
+        class="search-form"
+    >
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search|default:'' }}"
+            placeholder="Search questions..."
+            class="search-input"
+        >
+
+
+        <select
+            name="category"
+            class="category-select"
+        >
+
+            <option value="">
+                All Categories
+            </option>
+
+            {% for category in categories %}
+
+                <option
+                    value="{{ category }}"
+                    {% if selected_category == category %}
+                        selected
+                    {% endif %}
+                >
+                    {{ category }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <select
+            name="status"
+            class="status-select"
+        >
+
+            <option value="">
+                All Status
+            </option>
+
+            <option
+                value="practiced"
+                {% if selected_status == "practiced" %}
+                    selected
+                {% endif %}
+            >
+                Practiced
+            </option>
+
+            <option
+                value="not_practiced"
+                {% if selected_status == "not_practiced" %}
+                    selected
+                {% endif %}
+            >
+                Not Practiced
+            </option>
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="search-button"
+        >
+            Search
+        </button>
+
+    </form>
+
+
+    {% for q in questions %}
+
+        <div class="question-card">
+
+            <h2>
+                {{ q.question }}
+            </h2>
+
+            <p class="category">
+                Category: {{ q.category }}
+            </p>
+
+            <p class="answer">
+                <strong>Answer:</strong>
+                {{ q.answer }}
+            </p>
+
+
+            {% if q.practiced %}
+
+                <p class="status practiced">
+                    ✓ Practiced
+                </p>
+
+            {% else %}
+
+                <p class="status not-practiced">
+                    Not Practiced
+                </p>
+
+                <a
+                    href="{% url 'mark_practiced' q.id %}"
+                    class="practice-button"
+                >
+                    Mark as Practiced
+                </a>
+
+            {% endif %}
+
+
+            <a
+                href="{% url 'edit_question' q.id %}"
+                class="edit-button"
+            >
+                Edit
+            </a>
+
+
+            <a
+                href="{% url 'delete_question' q.id %}"
+                class="delete-button"
+            >
+                Delete
+            </a>
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty-message">
+            No questions found.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+
+</body>
+
+</html>
