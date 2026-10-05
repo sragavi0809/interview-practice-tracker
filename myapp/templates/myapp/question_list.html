@@ -1,32 +1,20 @@
-<!DOCTYPE html>
+{% extends "myapp/base.html" %}
 
-<html lang="en">
+{% block title %}
+Question Bank
+{% endblock %}
 
-<head>
-
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Interview Questions</title>
+{% block content %}
 
 <style>
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f6f8;
-        margin: 0;
-        padding: 0;
-    }
-
-    .container {
+    .question-page {
         width: 85%;
         max-width: 1000px;
         margin: 40px auto;
     }
 
-    h1 {
+    .question-page h1 {
         text-align: center;
         font-size: 36px;
         margin-bottom: 8px;
@@ -178,7 +166,7 @@
 
     @media (max-width: 700px) {
 
-        .container {
+        .question-page {
             width: 90%;
         }
 
@@ -196,180 +184,183 @@
             width: 100%;
         }
 
+        .question-page h1 {
+            font-size: 28px;
+        }
+
+        .question-card {
+            padding: 20px;
+        }
+
     }
 
 </style>
 
-</head>
+<div class="question-page">
 
-<body>
+```
+<h1>
+    Interview Questions
+</h1>
+
+<p class="subtitle">
+    Practice your interview questions and track your progress
+</p>
 
 
-<div class="container">
+<a
+    href="{% url 'add_question' %}"
+    class="top-button"
+>
+    + Add New Question
+</a>
 
-    <h1>
-        Interview Questions
-    </h1>
 
-    <p class="subtitle">
-        Practice your interview questions and track your progress
-    </p>
+<form
+    method="GET"
+    class="search-form"
+>
 
-    <a
-        href="{% url 'add_question' %}"
-        class="top-button"
+    <input
+        type="text"
+        name="search"
+        value="{{ search|default:'' }}"
+        placeholder="Search questions..."
+        class="search-input"
     >
-        + Add New Question
-    </a>
 
 
-    <form
-        method="GET"
-        class="search-form"
+    <select
+        name="category"
+        class="category-select"
     >
 
-        <input
-            type="text"
-            name="search"
-            value="{{ search|default:'' }}"
-            placeholder="Search questions..."
-            class="search-input"
-        >
+        <option value="">
+            All Categories
+        </option>
 
-
-        <select
-            name="category"
-            class="category-select"
-        >
-
-            <option value="">
-                All Categories
-            </option>
-
-            {% for category in categories %}
-
-                <option
-                    value="{{ category }}"
-                    {% if selected_category == category %}
-                        selected
-                    {% endif %}
-                >
-                    {{ category }}
-                </option>
-
-            {% endfor %}
-
-        </select>
-
-
-        <select
-            name="status"
-            class="status-select"
-        >
-
-            <option value="">
-                All Status
-            </option>
+        {% for category in categories %}
 
             <option
-                value="practiced"
-                {% if selected_status == "practiced" %}
+                value="{{ category }}"
+                {% if selected_category == category %}
                     selected
                 {% endif %}
             >
-                Practiced
+                {{ category }}
             </option>
 
-            <option
-                value="not_practiced"
-                {% if selected_status == "not_practiced" %}
-                    selected
-                {% endif %}
-            >
-                Not Practiced
-            </option>
+        {% endfor %}
 
-        </select>
+    </select>
 
 
-        <button
-            type="submit"
-            class="search-button"
-        >
-            Search
-        </button>
+    <select
+        name="status"
+        class="status-select"
+    >
 
-    </form>
+        <option value="">
+            All Status
+        </option>
 
-
-    {% for q in questions %}
-
-        <div class="question-card">
-
-            <h2>
-                {{ q.question }}
-            </h2>
-
-            <p class="category">
-                Category: {{ q.category }}
-            </p>
-
-            <p class="answer">
-                <strong>Answer:</strong>
-                {{ q.answer }}
-            </p>
-
-
-            {% if q.practiced %}
-
-                <p class="status practiced">
-                    ✓ Practiced
-                </p>
-
-            {% else %}
-
-                <p class="status not-practiced">
-                    Not Practiced
-                </p>
-
-                <a
-                    href="{% url 'mark_practiced' q.id %}"
-                    class="practice-button"
-                >
-                    Mark as Practiced
-                </a>
-
+        <option
+            value="practiced"
+            {% if selected_status == "practiced" %}
+                selected
             {% endif %}
+        >
+            Practiced
+        </option>
+
+        <option
+            value="not_practiced"
+            {% if selected_status == "not_practiced" %}
+                selected
+            {% endif %}
+        >
+            Not Practiced
+        </option>
+
+    </select>
 
 
-            <a
-                href="{% url 'edit_question' q.id %}"
-                class="edit-button"
-            >
-                Edit
-            </a>
+    <button
+        type="submit"
+        class="search-button"
+    >
+        Search
+    </button>
+
+</form>
 
 
-            <a
-                href="{% url 'delete_question' q.id %}"
-                class="delete-button"
-            >
-                Delete
-            </a>
+{% for q in questions %}
 
-        </div>
+    <div class="question-card">
 
-    {% empty %}
+        <h2>
+            {{ q.question }}
+        </h2>
 
-        <p class="empty-message">
-            No questions found.
+        <p class="category">
+            Category: {{ q.category }}
         </p>
 
-    {% endfor %}
+        <p class="answer">
+            <strong>Answer:</strong>
+            {{ q.answer }}
+        </p>
+
+
+        {% if q.practiced %}
+
+            <p class="status practiced">
+                ✓ Practiced
+            </p>
+
+        {% else %}
+
+            <p class="status not-practiced">
+                Not Practiced
+            </p>
+
+            <a
+                href="{% url 'mark_practiced' q.id %}"
+                class="practice-button"
+            >
+                Mark as Practiced
+            </a>
+
+        {% endif %}
+
+
+        <a
+            href="{% url 'edit_question' q.id %}"
+            class="edit-button"
+        >
+            Edit
+        </a>
+
+
+        <a
+            href="{% url 'delete_question' q.id %}"
+            class="delete-button"
+        >
+            Delete
+        </a>
+
+    </div>
+
+{% empty %}
+
+    <p class="empty-message">
+        No questions found.
+    </p>
+
+{% endfor %}
+
 
 </div>
 
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,132 +1,171 @@
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Practice History</title>
+{% extends "myapp/base.html" %}
 
 
-    <style>
+{% block title %}
+Practice History
+{% endblock %}
 
-        body {
 
-            font-family: Arial, sans-serif;
+{% block content %}
 
-            background-color: #f4f6f8;
 
-            margin: 0;
+<style>
 
-            padding: 40px;
+    /* =========================
+       HISTORY PAGE
+    ========================= */
+
+    .history-page {
+
+        width: 90%;
+        max-width: 900px;
+
+        margin: 40px auto;
+
+    }
+
+
+    .history-page h1 {
+
+        text-align: center;
+
+        color: #222;
+
+        margin-bottom: 30px;
+
+    }
+
+
+    /* =========================
+       HISTORY CARD
+    ========================= */
+
+    .history-card {
+
+        background-color: white;
+
+        padding: 20px;
+
+        margin-bottom: 15px;
+
+        border-radius: 10px;
+
+        border: 1px solid #e5e7eb;
+
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+    }
+
+
+    .score {
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .percentage {
+
+        font-size: 18px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .date {
+
+        color: #666;
+
+        font-size: 14px;
+
+    }
+
+
+    /* =========================
+       EMPTY MESSAGE
+    ========================= */
+
+    .empty {
+
+        background-color: white;
+
+        padding: 30px;
+
+        text-align: center;
+
+        border-radius: 10px;
+
+        border: 1px solid #e5e7eb;
+
+    }
+
+
+    .empty h2 {
+
+        margin-top: 0;
+
+        color: #222;
+
+    }
+
+
+    .empty p {
+
+        color: #666;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        .history-page {
+
+            width: 94%;
+
+            margin: 25px auto;
 
         }
 
+        .history-page h1 {
 
-        .container {
-
-            max-width: 900px;
-
-            margin: auto;
+            font-size: 25px;
 
         }
-
-
-        h1 {
-
-            text-align: center;
-
-            color: #222;
-
-            margin-bottom: 30px;
-
-        }
-
 
         .history-card {
 
-            background-color: white;
-
-            padding: 20px;
-
-            margin-bottom: 15px;
-
-            border-radius: 10px;
-
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 17px;
 
         }
-
 
         .score {
 
-            font-size: 24px;
-
-            font-weight: bold;
-
-            margin-bottom: 10px;
+            font-size: 21px;
 
         }
 
+    }
 
-        .percentage {
-
-            font-size: 18px;
-
-            margin-bottom: 10px;
-
-        }
+</style>
 
 
-        .date {
 
-            color: #666;
-
-            font-size: 14px;
-
-        }
+<div class="history-page">
 
 
-        .back-button {
-
-            display: inline-block;
-
-            margin-top: 20px;
-
-            text-decoration: none;
-
-            color: #222;
-
-        }
-
-
-        .empty {
-
-            background-color: white;
-
-            padding: 30px;
-
-            text-align: center;
-
-            border-radius: 10px;
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<div class="container">
-
-
-    <h1>📅 Practice History</h1>
+    <h1>
+        📅 Practice History
+    </h1>
 
 
     {% if results %}
@@ -180,11 +219,14 @@
 
         <div class="empty">
 
-            <h2>No practice history yet</h2>
+            <h2>
+                No practice history yet
+            </h2>
 
             <p>
 
-                Complete a practice session to see your results here.
+                Complete a practice session
+                to see your results here.
 
             </p>
 
@@ -194,23 +236,8 @@
     {% endif %}
 
 
-    <a
-
-        href="{% url 'home' %}"
-
-        class="back-button"
-
-    >
-
-        ← Back to Dashboard
-
-    </a>
-
-
 </div>
 
 
-</body>
-
-</html>
+{% endblock %}
 

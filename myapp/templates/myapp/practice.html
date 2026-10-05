@@ -1,148 +1,330 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Practice Mode</title>
+{% extends "myapp/base.html" %}
 
 
-    <style>
+{% block title %}
+Practice Mode
+{% endblock %}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 40px;
+
+{% block content %}
+
+
+<style>
+
+    /* =========================
+       PRACTICE PAGE
+    ========================= */
+
+    .practice-container {
+
+        width: 90%;
+        max-width: 800px;
+
+        margin: 40px auto;
+
+    }
+
+
+    .practice-container h1 {
+
+        text-align: center;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    /* =========================
+       PROGRESS
+    ========================= */
+
+    .progress {
+
+        text-align: center;
+
+        color: #666;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    /* =========================
+       QUESTION CARD
+    ========================= */
+
+    .question-card {
+
+        background-color: white;
+
+        padding: 30px;
+
+        border-radius: 12px;
+
+        border: 1px solid #e5e7eb;
+
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+    }
+
+
+    .question-card h2 {
+
+        margin-top: 0;
+
+        line-height: 1.5;
+
+    }
+
+
+    .category {
+
+        color: #666;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    /* =========================
+       TEXTAREA
+    ========================= */
+
+    textarea {
+
+        width: 100%;
+
+        min-height: 120px;
+
+        padding: 12px;
+
+        margin-top: 15px;
+
+        border: 1px solid #ccc;
+
+        border-radius: 8px;
+
+        font-size: 15px;
+
+        resize: vertical;
+
+        box-sizing: border-box;
+
+        font-family: Arial, sans-serif;
+
+    }
+
+
+    textarea:focus {
+
+        outline: none;
+
+        border-color: #111827;
+
+    }
+
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    button {
+
+        padding: 10px 18px;
+
+        margin-top: 15px;
+
+        border: none;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        font-size: 15px;
+
+    }
+
+
+    button:disabled {
+
+        opacity: 0.6;
+
+        cursor: not-allowed;
+
+    }
+
+
+    .submit-button {
+
+        background-color: #222;
+
+        color: white;
+
+    }
+
+
+    .submit-button:hover {
+
+        background-color: #374151;
+
+    }
+
+
+    .right-button {
+
+        background-color: #198754;
+
+        color: white;
+
+        margin-right: 10px;
+
+    }
+
+
+    .wrong-button {
+
+        background-color: #dc3545;
+
+        color: white;
+
+    }
+
+
+    /* =========================
+       ANSWER BOXES
+    ========================= */
+
+    .answer-box {
+
+        background-color: #f1f1f1;
+
+        padding: 15px;
+
+        margin-top: 20px;
+
+        border-radius: 8px;
+
+    }
+
+
+    .user-answer {
+
+        background-color: #e8f4ff;
+
+        padding: 15px;
+
+        margin-top: 20px;
+
+        border-radius: 8px;
+
+        word-wrap: break-word;
+
+    }
+
+
+    .hidden {
+
+        display: none;
+
+    }
+
+
+    /* =========================
+       RESULT CARD
+    ========================= */
+
+    .result-card {
+
+        background-color: white;
+
+        padding: 30px;
+
+        border-radius: 12px;
+
+        border: 1px solid #e5e7eb;
+
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+
+        text-align: center;
+
+    }
+
+
+    .result-card h2 {
+
+        margin-top: 0;
+
+    }
+
+
+    #save-message {
+
+        font-weight: bold;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        .practice-container {
+
+            width: 94%;
+
+            margin: 25px auto;
+
         }
 
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
+        .practice-container h1 {
 
+            font-size: 25px;
 
-        h1 {
-            text-align: center;
-        }
-
-
-        .progress {
-            text-align: center;
-            color: #666;
-            margin-bottom: 20px;
         }
 
 
         .question-card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+
+            padding: 20px;
+
         }
 
 
-        .category {
-            color: #666;
-        }
-
-
-        textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            margin-top: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-
-
-        button {
-            padding: 10px 18px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-
-        .submit-button {
-            background-color: #222;
-            color: white;
-        }
-
-
-        .right-button {
-            background-color: #198754;
-            color: white;
-            margin-right: 10px;
-        }
-
-
+        .right-button,
         .wrong-button {
-            background-color: #dc3545;
-            color: white;
+
+            width: 100%;
+
+            margin-right: 0;
+
         }
 
+    }
 
-        .answer-box {
-            background-color: #f1f1f1;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-        }
+</style>
 
 
-        .user-answer {
-            background-color: #e8f4ff;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-        }
+
+<div class="practice-container">
 
 
-        .hidden {
-            display: none;
-        }
+    <!-- =========================
+         TITLE
+    ========================= -->
+
+    <h1>
+        🎯 Practice Mode
+    </h1>
 
 
-        .back-button {
-            display: inline-block;
-            margin-top: 25px;
-            text-decoration: none;
-            color: #222;
-        }
 
-
-        .result-card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<div class="container">
-
-
-    <h1>🎯 Practice Mode</h1>
-
+    <!-- =========================
+         PROGRESS
+    ========================= -->
 
     <div class="progress">
 
@@ -161,7 +343,13 @@
     </div>
 
 
+
     {% if questions %}
+
+
+        <!-- =========================
+             QUESTIONS
+        ========================= -->
 
 
         {% for question in questions %}
@@ -185,12 +373,17 @@
                 <p class="category">
 
                     Category:
+
                     {{ question.category }}
 
                 </p>
 
 
-                <!-- User Answer -->
+
+                <!-- =========================
+                     USER ANSWER
+                ========================= -->
+
 
                 <textarea
                     id="user-answer-{{ forloop.counter0 }}"
@@ -209,7 +402,11 @@
                 </button>
 
 
-                <!-- User's Answer -->
+
+                <!-- =========================
+                     SUBMITTED ANSWER
+                ========================= -->
+
 
                 <div
                     id="submitted-answer-{{ forloop.counter0 }}"
@@ -220,6 +417,7 @@
                         Your Answer:
                     </strong>
 
+
                     <p
                         id="user-answer-text-{{ forloop.counter0 }}"
                     ></p>
@@ -227,7 +425,11 @@
                 </div>
 
 
-                <!-- Correct Answer -->
+
+                <!-- =========================
+                     CORRECT ANSWER
+                ========================= -->
+
 
                 <div
                     id="correct-answer-{{ forloop.counter0 }}"
@@ -238,6 +440,7 @@
                         Correct Answer:
                     </strong>
 
+
                     <p>
                         {{ question.answer }}
                     </p>
@@ -245,7 +448,11 @@
                 </div>
 
 
-                <!-- Right / Wrong -->
+
+                <!-- =========================
+                     RIGHT / WRONG
+                ========================= -->
+
 
                 <div
                     id="buttons-{{ forloop.counter0 }}"
@@ -287,7 +494,11 @@
         {% endfor %}
 
 
-        <!-- Result -->
+
+        <!-- =========================
+             RESULT
+        ========================= -->
+
 
         <div
             id="result"
@@ -349,6 +560,11 @@
     {% else %}
 
 
+        <!-- =========================
+             NO QUESTIONS
+        ========================= -->
+
+
         <div class="question-card">
 
             <h2>
@@ -365,17 +581,8 @@
     {% endif %}
 
 
-    <a
-        href="{% url 'home' %}"
-        class="back-button"
-    >
-
-        ← Back to Dashboard
-
-    </a>
-
-
 </div>
+
 
 
 <script>
@@ -706,6 +913,5 @@ function getCookie(name) {
 </script>
 
 
-</body>
+{% endblock %}
 
-</html>

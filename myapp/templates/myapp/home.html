@@ -1,539 +1,387 @@
 
-<!DOCTYPE html>
-<html lang="en">
+{% extends "myapp/base.html" %}
 
-<head>
 
-    <meta charset="UTF-8">
+{% block title %}
+Interview Practice Tracker
+{% endblock %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Interview Practice Tracker</title>
+{% block content %}
 
-    <style>
 
-        * {
-            box-sizing: border-box;
+<style>
+
+    /* =========================
+       MAIN CONTAINER
+    ========================= */
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+
+    /* =========================
+       WELCOME
+    ========================= */
+
+    .welcome {
+        margin-bottom: 30px;
+    }
+
+    .welcome h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    .welcome p {
+        margin-top: 8px;
+        color: #6b7280;
+    }
+
+
+    /* =========================
+       STATISTICS
+    ========================= */
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 22px;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stat-card h2 {
+        font-size: 28px;
+        margin: 18px 0 5px;
+    }
+
+    .stat-card p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       DASHBOARD GRID
+    ========================= */
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 22px;
+        margin-bottom: 22px;
+    }
+
+    .panel {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 25px;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    .panel-header h2 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .panel-header span {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       OVERALL PROGRESS
+    ========================= */
+
+    .overall-number {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e5e7eb;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #111827;
+        border-radius: 20px;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       CATEGORY PROGRESS
+    ========================= */
+
+    .category-item {
+        margin-bottom: 19px;
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .category-bar {
+        width: 100%;
+        height: 9px;
+        background: #e5e7eb;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .category-fill {
+        height: 100%;
+        background: #111827;
+        border-radius: 20px;
+    }
+
+    .category-info {
+        margin-top: 5px;
+        color: #9ca3af;
+        font-size: 11px;
+    }
+
+
+    /* =========================
+       WEEKLY PROGRESS
+    ========================= */
+
+    .weekly-chart {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 180px;
+        gap: 12px;
+        padding-top: 20px;
+    }
+
+    .day-column {
+        height: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .day-count {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .day-bar-area {
+        height: 120px;
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .day-bar {
+        width: 65%;
+        min-height: 5px;
+        background: #111827;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .day-name {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+
+    /* =========================
+       RECENT SESSIONS
+    ========================= */
+
+    .session {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .session:last-child {
+        border-bottom: none;
+    }
+
+    .session-info strong {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .session-info span {
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+    .score {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+
+    /* =========================
+       QUICK ACTIONS
+    ========================= */
+
+    .actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .action-button {
+        padding: 17px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        color: #111827;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .action-button:hover {
+        background: #f3f4f6;
+    }
+
+    .practice-button {
+        background: #111827;
+        color: white;
+    }
+
+    .practice-button:hover {
+        background: #374151;
+    }
+
+
+    /* =========================
+       FOCUS AREAS
+    ========================= */
+
+    .focus-box {
+        background: #f9fafb;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+
+    .focus-box strong {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .focus-box span {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .empty {
+        color: #9ca3af;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       RESPONSIVE DASHBOARD
+    ========================= */
+
+    @media (max-width: 950px) {
+
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f6f7fb;
-            color: #1f2937;
+        .dashboard-grid {
+            grid-template-columns: 1fr;
         }
 
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        .navbar {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 18px 5%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .actions {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            background: #111827;
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-        }
-
-        .brand h2 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .brand p {
-            margin: 3px 0 0;
-            color: #6b7280;
-            font-size: 12px;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #4b5563;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .nav-links a:hover {
-            color: #111827;
-        }
-
-        .logout {
-            background: #111827;
-            color: white !important;
-            padding: 9px 17px;
-            border-radius: 7px;
-        }
+    }
 
 
-        /* =========================
-           MAIN CONTAINER
-        ========================= */
+    @media (max-width: 600px) {
 
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 40px auto;
+            width: 94%;
+            margin: 25px auto;
         }
 
+        .stats {
+            grid-template-columns: 1fr;
+        }
 
-        /* =========================
-           WELCOME
-        ========================= */
-
-        .welcome {
-            margin-bottom: 30px;
+        .actions {
+            grid-template-columns: 1fr;
         }
 
         .welcome h1 {
-            margin: 0;
-            font-size: 32px;
+            font-size: 25px;
         }
 
-        .welcome p {
-            margin-top: 8px;
-            color: #6b7280;
-        }
+    }
 
+</style>
 
-        /* =========================
-           STATISTICS
-        ========================= */
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 22px;
-            border-radius: 14px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .stat-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stat-card h2 {
-            font-size: 28px;
-            margin: 18px 0 5px;
-        }
-
-        .stat-card p {
-            margin: 0;
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-
-        /* =========================
-           DASHBOARD GRID
-        ========================= */
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1.3fr 1fr;
-            gap: 22px;
-            margin-bottom: 22px;
-        }
-
-        .panel {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            padding: 25px;
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 22px;
-        }
-
-        .panel-header h2 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .panel-header span {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-
-        /* =========================
-           OVERALL PROGRESS
-        ========================= */
-
-        .overall-number {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #111827;
-            border-radius: 20px;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-
-        /* =========================
-           CATEGORY PROGRESS
-        ========================= */
-
-        .category-item {
-            margin-bottom: 19px;
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 7px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .category-bar {
-            width: 100%;
-            height: 9px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .category-fill {
-            height: 100%;
-            background: #111827;
-            border-radius: 20px;
-        }
-
-        .category-info {
-            margin-top: 5px;
-            color: #9ca3af;
-            font-size: 11px;
-        }
-
-
-        /* =========================
-           WEEKLY PROGRESS
-        ========================= */
-
-        .weekly-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 180px;
-            gap: 12px;
-            padding-top: 20px;
-        }
-
-        .day-column {
-            height: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .day-count {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .day-bar-area {
-            height: 120px;
-            width: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .day-bar {
-            width: 65%;
-            min-height: 5px;
-            background: #111827;
-            border-radius: 6px 6px 0 0;
-        }
-
-        .day-name {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-
-        /* =========================
-           RECENT SESSIONS
-        ========================= */
-
-        .session {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .session:last-child {
-            border-bottom: none;
-        }
-
-        .session-info strong {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .session-info span {
-            color: #9ca3af;
-            font-size: 12px;
-        }
-
-        .score {
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-
-        /* =========================
-           ACTIONS
-        ========================= */
-
-        .actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 22px;
-        }
-
-        .action-button {
-            padding: 17px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 10px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            color: #111827;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .action-button:hover {
-            background: #f3f4f6;
-        }
-
-        .practice-button {
-            background: #111827;
-            color: white;
-        }
-
-        .practice-button:hover {
-            background: #374151;
-        }
-
-
-        /* =========================
-           FOCUS AREAS
-        ========================= */
-
-        .focus-box {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .focus-box strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .focus-box span {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .empty {
-            color: #9ca3af;
-            font-size: 14px;
-        }
-
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 950px) {
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-links {
-                gap: 12px;
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .container {
-                width: 94%;
-                margin: 25px auto;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .actions {
-                grid-template-columns: 1fr;
-            }
-
-            .welcome h1 {
-                font-size: 25px;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================
-     NAVBAR
-========================= -->
-
-<nav class="navbar">
-
-    <div class="brand">
-
-        <div class="brand-icon">
-            🧠
-        </div>
-
-        <div>
-
-            <h2>
-                Interview Practice Tracker
-            </h2>
-
-            <p>
-                Build confidence. Practice smarter.
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="nav-links">
-
-        <a href="{% url 'home' %}">
-            🏠 Dashboard
-        </a>
-
-        <a href="{% url 'question_list' %}">
-            📚 Question Bank
-        </a>
-
-        <a href="{% url 'practice' %}">
-            🎯 Daily Practice
-        </a>
-
-        <a href="{% url 'practice_history' %}">
-            📅 History
-        </a>
-
-        <a href="{% url 'logout' %}" class="logout">
-            Logout
-        </a>
-
-    </div>
-
-</nav>
-
-
-<!-- =========================
-     MAIN
-========================= -->
 
 <div class="container">
 
 
-    <!-- WELCOME -->
+    <!-- =========================
+         WELCOME
+    ========================= -->
 
     <div class="welcome">
 
@@ -548,6 +396,7 @@
     </div>
 
 
+
     <!-- =========================
          STATISTICS
     ========================= -->
@@ -559,13 +408,9 @@
 
             <div class="stat-top">
 
-                <span>
-                    📚
-                </span>
+                <span>📚</span>
 
-                <span>
-                    📝
-                </span>
+                <span>📝</span>
 
             </div>
 
@@ -580,17 +425,14 @@
         </div>
 
 
+
         <div class="stat-card">
 
             <div class="stat-top">
 
-                <span>
-                    ✅
-                </span>
+                <span>✅</span>
 
-                <span>
-                    🎯
-                </span>
+                <span>🎯</span>
 
             </div>
 
@@ -605,17 +447,14 @@
         </div>
 
 
+
         <div class="stat-card">
 
             <div class="stat-top">
 
-                <span>
-                    ⭐
-                </span>
+                <span>⭐</span>
 
-                <span>
-                    📊
-                </span>
+                <span>📊</span>
 
             </div>
 
@@ -630,17 +469,14 @@
         </div>
 
 
+
         <div class="stat-card">
 
             <div class="stat-top">
 
-                <span>
-                    🔥
-                </span>
+                <span>🔥</span>
 
-                <span>
-                    ⚡
-                </span>
+                <span>⚡</span>
 
             </div>
 
@@ -658,8 +494,9 @@
     </div>
 
 
+
     <!-- =========================
-         PROGRESS + CATEGORY
+         OVERALL + CATEGORY
     ========================= -->
 
     <div class="dashboard-grid">
@@ -714,6 +551,7 @@
         </div>
 
 
+
         <!-- CATEGORY PROGRESS -->
 
         <div class="panel">
@@ -732,6 +570,7 @@
 
 
             {% for category in category_progress %}
+
 
                 <div class="category-item">
 
@@ -763,11 +602,13 @@
                         {{ category.practiced }}
                         /
                         {{ category.total }}
+
                         questions practiced
 
                     </div>
 
                 </div>
+
 
             {% empty %}
 
@@ -777,10 +618,12 @@
 
             {% endfor %}
 
+
         </div>
 
 
     </div>
+
 
 
     <!-- =========================
@@ -806,6 +649,7 @@
 
 
             {% for day in weekly_progress %}
+
 
                 <div class="day-column">
 
@@ -841,6 +685,7 @@
 
                 </div>
 
+
             {% empty %}
 
                 <p class="empty">
@@ -855,7 +700,9 @@
     </div>
 
 
+
     <br>
+
 
 
     <!-- =========================
@@ -904,6 +751,7 @@
     </div>
 
 
+
     <!-- =========================
          RECENT PRACTICE SESSIONS
     ========================= -->
@@ -924,6 +772,7 @@
 
 
         {% for session in recent_sessions %}
+
 
             <div class="session">
 
@@ -948,6 +797,7 @@
 
             </div>
 
+
         {% empty %}
 
             <p class="empty">
@@ -959,10 +809,13 @@
 
         {% endfor %}
 
+
     </div>
 
 
+
     <br>
+
 
 
     <!-- =========================
@@ -986,7 +839,9 @@
 
         {% for category in category_progress %}
 
+
             {% if category.percentage < 50 %}
+
 
                 <div class="focus-box">
 
@@ -1006,15 +861,19 @@
 
                 </div>
 
+
             {% endif %}
 
+
         {% empty %}
+
 
             <p class="empty">
 
                 Add some questions to start tracking your focus areas.
 
             </p>
+
 
         {% endfor %}
 
@@ -1025,7 +884,5 @@
 </div>
 
 
-</body>
-
-</html>
+{% endblock %}
 
